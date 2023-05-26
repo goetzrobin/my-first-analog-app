@@ -1,0 +1,70 @@
+{
+  "name": "notes-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/notes-app/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": [
+        "{options.outputPath}",
+        "dist/apps/notes-app/.nitro",
+        "dist/apps/notes-app/ssr",
+        "dist/apps/notes-app/analog"
+      ],
+      "options": {
+        "main": "apps/notes-app/src/main.ts",
+        "configFile": "apps/notes-app/vite.config.ts",
+        "outputPath": "dist/apps/notes-app/client"
+      },
+      "defaultConfiguration": "production",
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "sourcemap": false,
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "notes-app:build",
+        "port": 4200
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "notes-app:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "notes-app:build:production"
+        }
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "notes-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/notes-app/**/*.ts",
+          "apps/notes-app/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["apps/notes-app/coverage"]
+    }
+  },
+  "tags": []
+}

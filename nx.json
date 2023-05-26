@@ -4,21 +4,29 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "ZjUwZjE0MDItYzVhYS00NzdiLWExNmYtNzk1N2QzZWIyODRlfHJlYWQtd3JpdGU="
       }
     }
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
+    }
+  },
+  "generators": {
+    "@nx/angular:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "none",
+      "e2eTestRunner": "cypress"
+    },
+    "@nx/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "none"
+    },
+    "@nx/angular:component": {
+      "style": "css"
     }
   }
 }
