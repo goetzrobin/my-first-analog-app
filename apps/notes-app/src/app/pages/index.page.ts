@@ -4,7 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { shareReplay, Subject, switchMap, take } from 'rxjs';
 import { waitFor } from '@analogjs/trpc';
 import { injectTRPCClient } from '../../trpc-client';
-import { Note } from '../../note';
+import { note } from '@prisma/client';
 
 @Component({
   selector: 'notes-app-home',
@@ -16,7 +16,7 @@ import { Note } from '../../note';
   },
   template: `
     <main class="flex-1 mx-auto">
-      <section class="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
+      <section class="space-y-6 pb-8 pt-6">
         <div
           class="container flex max-w-[64rem] flex-col items-center gap-4 text-center"
         >
@@ -176,7 +176,7 @@ import { Note } from '../../note';
             *ngFor="let note of notes; trackBy: noteTrackBy; let i = index"
           >
             <div class="flex items-center justify-between">
-              <p class="text-sm text-zinc-400">{{ note.createdAt | date }}</p>
+              <p class="text-sm text-zinc-400">{{ note.created_at | date }}</p>
               <button
                 [attr.data-testid]="'removeNoteAtIndexBtn' + i"
                 class="text-xs text-center h-6 w-6 bg-opacity-10 hover:bg-opacity-50 bg-zinc-200 text-zinc-500"
@@ -219,8 +219,8 @@ export default class HomeComponent {
     this.triggerRefresh$.next();
   }
 
-  public noteTrackBy = (index: number, note: Note) => {
-    return note.id;
+  public noteTrackBy = (index: number, note: note) => {
+    return note.id
   };
 
   public addPost(form: NgForm) {
@@ -236,7 +236,7 @@ export default class HomeComponent {
     form.form.reset();
   }
 
-  public removePost(id: number) {
+  public removePost(id: bigint) {
     this._trpc.note.remove
       .mutate({ id })
       .pipe(take(1))

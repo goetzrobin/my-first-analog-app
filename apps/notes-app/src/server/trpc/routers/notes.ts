@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc';
-import { Note } from '../../../note';
+import { PrismaClient } from '@prisma/client';
 
-let noteId = 0;
-const notes: Note[] = [];
+const prisma = new PrismaClient();
+
 export const noteRouter = router({
   create: publicProcedure
     .input(
@@ -11,22 +11,25 @@ export const noteRouter = router({
         title: z.string(),
       })
     )
-    .mutation(({ input }) =>
-      notes.push({
-        id: noteId++,
+    .mutation(async ({ input }) =>
+     await prisma.note.create({
+        data: {
         note: input.title,
-        createdAt: new Date().toISOString(),
+      }
       })
     ),
-  list: publicProcedure.query(() => notes),
+  list: publicProcedure.query(async () => await prisma.note.findMany()),
   remove: publicProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.bigint(),
       })
     )
-    .mutation(({ input }) => {
-      const index = notes.findIndex((note) => input.id === note.id);
-      notes.splice(index, 1);
+    .mutation(async ({ input }) => {
+      await prisma.note.delete({
+        where: {
+          id: input.id
+        }
+      })
     }),
 });
