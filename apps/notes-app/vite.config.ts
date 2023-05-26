@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       replace({
         preventAssignment: true,
-        'http://127.0.0.1:4200': 'https://[REPLACE_WITH_YOUR_VERCEL_APP_NAME].vercel.app'
+        'http://127.0.0.1:4200': 'https://my-first-analog-app.vercel.app'
       }),
       analog({
         nitro: {
